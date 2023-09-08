@@ -13,18 +13,18 @@
     </head>
         <body>
           <script>
-            window.flutter_inject.postMessage("Loading poll lib");
+            //window.flutter_inject.postMessage("Loading poll lib");
           </script>
           <script src="poll_lib_wasm.js"></script>
           <script>
             // Define a Web Worker to run WebAssembly code
             const worker = new Worker("worker.js");
             function vote(poll_id, choices, num_choices, poll_pub_key) {
-                window.flutter_inject.postMessage(`Received vote request.. ${poll_id} ${choices} ${num_choices} ${poll_pub_key}`);
+                //window.flutter_inject.postMessage(`Received vote request.. ${poll_id} ${choices} ${num_choices} ${poll_pub_key}`);
                 worker.postMessage(JSON.stringify({poll_id, choices, num_choices, poll_pub_key}));
             }
-            window.flutter_inject.postMessage("Calling..");
-            setInterval(function() {
+           // window.flutter_inject.postMessage("Calling..");
+            /*setInterval(function() {
                 try {
                     window.flutter_inject.postMessage("Posting message...");
                 worker.postMessage({});
@@ -32,12 +32,12 @@
                     window.flutter_inject.postMessage("Error");
                 }
             },
-            5000);
+            5000);*/
 
             // Define a message handler for the worker
             worker.onmessage = function(event) {
               // Send the result back to Dart
-              window.flutter_inject.postMessage(JSON.stringify(event.data));
+              //window.flutter_inject.postMessage(JSON.stringify(event.data));
               window.outputChannel.postMessage(JSON.stringify(event.data));
             };
 
