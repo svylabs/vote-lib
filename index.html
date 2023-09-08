@@ -21,7 +21,7 @@
             const worker = new Worker("worker.js");
             function vote(poll_id, choices, num_choices, poll_pub_key) {
                 window.flutter_inject.postMessage(`Received vote request.. ${poll_id} ${choices} ${num_choices} ${poll_pub_key}`);
-                worker.postMessage({poll_id, choices, num_choices, poll_pub_key});
+                worker.postMessage(JSON.stringify({poll_id, choices, num_choices, poll_pub_key}));
             }
             window.flutter_inject.postMessage("Calling..");
             setInterval(function() {
