@@ -18,6 +18,7 @@ async function init_wasm_in_worker() {
         var worker_result = vote_single(1, 5, "MC6xp3UbtRrh9Chf_9JsjbmzUqjyvPz3EIoq82YMVTo");
 
         // Send response back to be handled by callback in main thread.
+        self.postMessage(vote_single);
         self.postMessage(worker_result);
     };
 };
