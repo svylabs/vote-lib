@@ -20,11 +20,11 @@
             // Define a Web Worker to run WebAssembly code
             const worker = new Worker("worker.js");
             function vote(platform, poll_id, choices, num_choices, poll_pub_key) {
-                window.flutter_inject.postMessage(`Received vote request.. ${poll_id} ${poll_id} ${choices} ${num_choices} ${poll_pub_key}`);
+                window.flutter_inject.postMessage(`Received vote request.. ${platform} ${poll_id} ${choices} ${num_choices} ${poll_pub_key}`);
                 if (platform === 1) {
                   worker.postMessage(JSON.stringify({platform, poll_id, choices, num_choices, poll_pub_key}));
                 } else {
-                  worker.postMessage({platform, poll_id, choices, num_choices, poll_pub_key});
+                  worker.postMessage(JSON.stringify({platform, poll_id, choices, num_choices, poll_pub_key}));
                 }
             }
            // window.flutter_inject.postMessage("Calling..");
