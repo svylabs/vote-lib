@@ -3,7 +3,7 @@ importScripts('poll_lib_wasm.js')
 
 // In the worker, we have a different struct that we want to use as in
 // `index.js`.
-const {vote_single} = wasm_bindgen;
+const {vote_single, vote_multi} = wasm_bindgen;
 //console.newLog(vote_single);
 
 async function init_wasm_in_worker() {
@@ -15,10 +15,19 @@ async function init_wasm_in_worker() {
     self.onmessage = async event => {
         // By using methods of a struct as reaction to messages passed to the
         // worker, we can preserve our state between messages.
-        const worker_result = vote_single(1, 5, "MC6xp3UbtRrh9Chf_9JsjbmzUqjyvPz3EIoq82YMVTo");
+        const num_choices = event.num_choices;
+        const choices = event.choices;
+        const poll_pub_key = event.poll_pub_key;
+        if (choices.length == 1) {
+            const result = vote_single(choices[0], num_choices, poll_pub_key);
+            self.postMessage({poll_id: event.poll_id, num_choices, choices, poll_pub_key, result});
+        } else {
+            const result = vote_multi(choices, num_choices, poll_pub_key);
+            self.postMessage({poll_id: event.poll_id, num_choices, choices, poll_pub_key, result});
+        }
 
         // Send response back to be handled by callback in main thread.
-        self.postMessage(worker_result);
+        
     };
 
     self.addEventListener('error', function(event) {
