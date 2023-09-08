@@ -19,9 +19,13 @@
           <script>
             // Define a Web Worker to run WebAssembly code
             const worker = new Worker("worker.js");
-            function vote(poll_id, choices, num_choices, poll_pub_key) {
-                window.flutter_inject.postMessage(`Received vote request.. ${poll_id} ${choices} ${num_choices} ${poll_pub_key}`);
-                worker.postMessage(JSON.stringify({poll_id, choices, num_choices, poll_pub_key}));
+            function vote(platform, poll_id, choices, num_choices, poll_pub_key) {
+                window.flutter_inject.postMessage(`Received vote request.. ${poll_id} ${poll_id} ${choices} ${num_choices} ${poll_pub_key}`);
+                if (platform === 1) {
+                  worker.postMessage(JSON.stringify({platform, poll_id, choices, num_choices, poll_pub_key}));
+                } else {
+                  worker.postMessage({platform, poll_id, choices, num_choices, poll_pub_key});
+                }
             }
            // window.flutter_inject.postMessage("Calling..");
             /*setInterval(function() {
@@ -37,12 +41,21 @@
             // Define a message handler for the worker
             worker.onmessage = function(event) {
               // Send the result back to Dart
-              window.flutter_inject.postMessage(event.data);
-              window.outputChannel.postMessage(event.data);
+              try {
+                window.flutter_inject.postMessage(event.data);
+                window.outputChannel.postMessage(event.data);
+              } catch (e) {
+                window.flutter_inject.postMessage(JSON.stringify(event.data));
+                window.outputChannel.postMessage(JSON.stringify(event.data));
+              }
             };
 
             worker.addEventListener('error', function(event) {
-               window.flutter_inject.postMessage(event.message);
+              try {
+                window.flutter_inject.postMessage(event.message);
+              } catch (e) {
+                window.flutter_inject.postMessage(JSON.stringify(event.message));
+              }
             })
 
           </script>
