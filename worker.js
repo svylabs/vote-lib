@@ -13,13 +13,13 @@ async function init_wasm_in_worker() {
     // Create a new object of the `NumberEval` struct.
     // Set callback to handle messages passed to the worker.
     self.onmessage = async event => {
+        //const result = vote_single(1, 5, 'MC6xp3UbtRrh9Chf_9JsjbmzUqjyvPz3EIoq82YMVTo');
+        //self.postMessage(result);
         let input = {};
         try {
            input = JSON.parse(event.data);
-           console.log(input);
         } catch (e) {
             input = event.data;
-            console.log(input);
         }
 
         // By using methods of a struct as reaction to messages passed to the
@@ -30,20 +30,11 @@ async function init_wasm_in_worker() {
         const platform = input.platform;
         if (choices.length == 1) {
             const result = vote_single(choices[0], num_choices, poll_pub_key);
-            if (platform == 1) {
-                self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
-            } else {
-                self.postMessage({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result});
-            }
+            self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
         } else {
             const result = vote_multi(choices, num_choices, poll_pub_key);
-            if (platform == 1) {
-                self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
-            } else {
-                self.postMessage({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result});
-            }
+            self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
         }
-
         // Send response back to be handled by callback in main thread.
         
     };
