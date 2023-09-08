@@ -17,8 +17,8 @@ async function init_wasm_in_worker() {
         // By using methods of a struct as reaction to messages passed to the
         // worker, we can preserve our state between messages.
         const num_choices = input.num_choices;
-        const choices = input.data.choices;
-        const poll_pub_key = input.data.poll_pub_key;
+        const choices = input.choices;
+        const poll_pub_key = input.poll_pub_key;
         if (choices.length == 1) {
             const result = vote_single(choices[0], num_choices, poll_pub_key);
             self.postMessage(JSON.stringify({poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
