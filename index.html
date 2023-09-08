@@ -24,7 +24,7 @@
                 if (platform === 1) {
                   worker.postMessage(JSON.stringify({platform, poll_id, choices, num_choices, poll_pub_key}));
                 } else {
-                  worker.postMessage(JSON.stringify({platform, poll_id, choices, num_choices, poll_pub_key}));
+                  worker.postMessage({platform, poll_id, choices, num_choices, poll_pub_key});
                 }
             }
            // window.flutter_inject.postMessage("Calling..");
