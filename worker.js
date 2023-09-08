@@ -21,7 +21,7 @@ async function init_wasm_in_worker() {
         self.postMessage(worker_result);
     };
 
-    worker.addEventListener('error', function(event) {
+    self.addEventListener('error', function(event) {
         self.postMessage("Error");
      })
 };
