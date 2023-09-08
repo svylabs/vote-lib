@@ -37,7 +37,6 @@
               window.flutter_inject.postMessage(JSON.stringify(event.data));
               window.outputChannel.postMessage(JSON.stringify(event.data));
             };
-            };
 
             worker.addEventListener('error', function(event) {
                window.flutter_inject.postMessage(event.message);
