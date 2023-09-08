@@ -30,10 +30,18 @@ async function init_wasm_in_worker() {
         const platform = input.platform;
         if (choices.length == 1) {
             const result = vote_single(choices[0], num_choices, poll_pub_key);
-            self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
+            if (platform == 1) {
+                self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
+            } else {
+                self.postMessage({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result});
+            }
         } else {
             const result = vote_multi(choices, num_choices, poll_pub_key);
-            self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
+            if (platform == 1) {
+                self.postMessage(JSON.stringify({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result}));
+            } else {
+                self.postMessage({platform, poll_id: input.poll_id, num_choices, choices, poll_pub_key, result});
+            }
         }
 
         // Send response back to be handled by callback in main thread.
