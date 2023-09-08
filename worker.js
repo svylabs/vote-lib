@@ -23,7 +23,7 @@ async function init_wasm_in_worker() {
 
     self.addEventListener('error', function(event) {
         self.postMessage("Error");
-     })
+    });
 };
 //importScripts('assets/poll_lib_wasm.js')
 init_wasm_in_worker();
