@@ -41,6 +41,7 @@
             // Define a message handler for the worker
             worker.onmessage = function(event) {
               // Send the result back to Dart
+              window.flutter_inject.postMessage("Received vote response.. " + typeof (event.data));
               try {
                 window.flutter_inject.postMessage(event.data);
                 window.outputChannel.postMessage(event.data);
