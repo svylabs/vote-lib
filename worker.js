@@ -15,15 +15,15 @@ async function init_wasm_in_worker() {
     self.onmessage = async event => {
         // By using methods of a struct as reaction to messages passed to the
         // worker, we can preserve our state between messages.
-        const num_choices = event.num_choices;
-        const choices = event.choices;
-        const poll_pub_key = event.poll_pub_key;
+        const num_choices = event.data.num_choices;
+        const choices = event.data.choices;
+        const poll_pub_key = event.data.poll_pub_key;
         if (choices.length == 1) {
             const result = vote_single(choices[0], num_choices, poll_pub_key);
-            self.postMessage({poll_id: event.poll_id, num_choices, choices, poll_pub_key, result});
+            self.postMessage({poll_id: event.data.poll_id, num_choices, choices, poll_pub_key, result});
         } else {
             const result = vote_multi(choices, num_choices, poll_pub_key);
-            self.postMessage({poll_id: event.poll_id, num_choices, choices, poll_pub_key, result});
+            self.postMessage({poll_id: event.data.poll_id, num_choices, choices, poll_pub_key, result});
         }
 
         // Send response back to be handled by callback in main thread.
