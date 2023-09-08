@@ -15,12 +15,15 @@ async function init_wasm_in_worker() {
     self.onmessage = async event => {
         // By using methods of a struct as reaction to messages passed to the
         // worker, we can preserve our state between messages.
-        var worker_result = vote_single(1, 5, "MC6xp3UbtRrh9Chf_9JsjbmzUqjyvPz3EIoq82YMVTo");
+        const worker_result = vote_single(1, 5, "MC6xp3UbtRrh9Chf_9JsjbmzUqjyvPz3EIoq82YMVTo");
 
         // Send response back to be handled by callback in main thread.
-        //self.postMessage(vote_single);
-        self.postMessage({data: worker_result});
+        self.postMessage(worker_result);
     };
+
+    worker.addEventListener('error', function(event) {
+        self.postMessage("Error");
+     })
 };
 //importScripts('assets/poll_lib_wasm.js')
 init_wasm_in_worker();
