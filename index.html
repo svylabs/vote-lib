@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>Vote app</title>
+        <style>
+            body {
+                margin: 0;
+            }
+            canvas {
+                width: 100%;
+                height: 100%
+            }
+        </style>
+    </head>
+        <body>
+         <h1>Hello!!</h1>
+          <script>
+            window.flutter_inject.postMessage("Loading poll lib");
+          </script>
+          <script src="poll_lib_wasm.js"></script>
+          <script>
+            // Define a Web Worker to run WebAssembly code
+            const worker = new Worker("worker.js");
+            window.flutter_inject.postMessage("Calling..");
+            setInterval(function() {
+                try {
+                    window.flutter_inject.postMessage("Posting message...");
+                worker.postMessage({});
+                } catch (e) {
+                    window.flutter_inject.postMessage("Error");
+                }
+            },
+            5000);
+
+            // Define a message handler for the worker
+            worker.onmessage = function(event) {
+              // Send the result back to Dart
+              window.flutter_inject.postMessage(event.data);
+              window.outputChannel.postMessage(event.data);
+            };
+
+          </script>
+        </body>
+      </html>
